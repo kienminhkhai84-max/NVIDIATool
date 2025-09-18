@@ -1,5 +1,3 @@
-# To learn more about how to use Nix to configure your environment
-# see: https://developers.google.com/idx/guides/customize-idx-env
 {pkgs}: {
   # Which nixpkgs channel to use.
   channel = "stable-24.05"; # or "unstable"
@@ -9,33 +7,7 @@
     pkgs.yarn
     pkgs.nodePackages.pnpm
     pkgs.bun
-    # Add a comprehensive list of libraries for Puppeteer
     pkgs.chromium
-    pkgs.alsa-lib
-    pkgs.at-spi2-atk
-    pkgs.cairo
-    pkgs.cups
-    pkgs.dbus
-    pkgs.expat
-    pkgs.gdk-pixbuf
-    pkgs.glib
-    pkgs.gtk3
-    pkgs.nspr
-    pkgs.nss
-    pkgs.pango
-    pkgs.libdrm
-    pkgs.xorg.libX11
-    pkgs.xorg.libXScrnSaver
-    pkgs.xorg.libXcomposite
-    pkgs.xorg.libXcursor
-    pkgs.xorg.libXdamage
-    pkgs.xorg.libXext
-    pkgs.xorg.libXfixes
-    pkgs.xorg.libXi
-    pkgs.xorg.libXrandr
-    pkgs.xorg.libXrender
-    pkgs.xorg.libXtst
-    pkgs.xorg.libxcb
   ];
   # Sets environment variables in the workspace
   env = {};

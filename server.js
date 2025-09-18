@@ -1,7 +1,7 @@
 
 const express = require('express');
 const fs = require('fs');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 
@@ -70,6 +70,7 @@ app.post('/do-login', async (req, res) => {
     try {
         console.log('Launching browser...');
         browser = await puppeteer.launch({
+            executablePath: '/usr/bin/chromium-browser',
             headless: "new",
             args: ['--no-sandbox', '--disable-setuid-sandbox']
         });
@@ -151,4 +152,3 @@ app.get('/logout', (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
-

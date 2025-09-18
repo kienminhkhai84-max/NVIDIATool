@@ -1,0 +1,196 @@
+/* --- Google Fonts --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+/* --- Biến màu và CSS Reset --- */
+:root {
+    --primary-color: #76b900;
+    --primary-hover-color: #67a100;
+    --dark-color: #2c3e50;
+    --light-color: #ffffff;
+    --grey-color: #8696a7;
+    --light-grey-color: #f0f4f8;
+    --border-color: #dfe7ef;
+    --error-bg-color: #fbebee;
+    --error-text-color: #c0392b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* --- Thân trang --- */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #e0eafc, #cfdef3);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* --- Thiết kế Card chung --- */
+.card {
+    background: var(--light-color);
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- Header của Card --- */
+.card-header {
+    margin-bottom: 30px;
+}
+
+.card-header .logo {
+    width: 60px;
+    margin-bottom: 15px;
+}
+
+.card-header h1 {
+    font-size: 1.8rem;
+    color: var(--dark-color);
+    font-weight: 600;
+}
+
+/* --- Form --- */
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    color: var(--grey-color);
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-group .icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(2px);
+    color: var(--grey-color);
+    pointer-events: none;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 12px 12px 45px; /* Thêm padding trái cho icon */
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(118, 185, 0, 0.2);
+}
+
+/* --- Nút bấm --- */
+.btn {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--primary-color);
+    color: var(--light-color);
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn:hover:not(:disabled) {
+    background-color: var(--primary-hover-color);
+    transform: translateY(-2px);
+}
+
+.btn:disabled {
+    background-color: #a7d159;
+    cursor: not-allowed;
+}
+
+/* --- Trạng thái Loading --- */
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: var(--light-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: none; /* Ẩn mặc định */
+}
+
+.btn.loading .spinner {
+    display: block; /* Hiện khi có class loading */
+}
+
+.btn.loading .btn-text {
+    display: block;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* --- Thông báo lỗi --- */
+.error-message {
+    background-color: var(--error-bg-color);
+    color: var(--error-text-color);
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    text-align: center;
+    border: 1px solid var(--error-text-color);
+}
+
+/* --- Giao diện Dashboard --- */
+.dashboard-content {
+    text-align: center;
+}
+
+.dashboard-content p {
+    font-size: 1.1rem;
+    color: var(--dark-color);
+    margin-bottom: 25px;
+}
+
+.dashboard-content .email {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.logout-link {
+    font-size: 1rem;
+    color: var(--grey-color);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.logout-link:hover {
+    color: var(--dark-color);
+    text-decoration: underline;
+}

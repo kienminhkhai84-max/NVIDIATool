@@ -1,22 +1,15 @@
 {
   "name": "my-local-web",
   "version": "1.0.0",
-  "description": "A simple web app with Puppeteer login.",
-  "main": "server/index.js",
+  "description": "A local web application for automated login.",
+  "main": "server.js",
   "scripts": {
-    "start": "node server/index.js",
-    "dev": "nodemon server/index.js"
+    "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "cookie-parser": "^1.4.6",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
-    "puppeteer": "^21.3.8"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
+    "puppeteer": "^21.5.2"
   }
 }

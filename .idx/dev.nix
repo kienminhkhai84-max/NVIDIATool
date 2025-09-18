@@ -23,6 +23,7 @@
     pkgs.nspr
     pkgs.nss
     pkgs.pango
+    pkgs.libdrm
     pkgs.xorg.libX11
     pkgs.xorg.libXScrnSaver
     pkgs.xorg.libXcomposite

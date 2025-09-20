@@ -170,3 +170,24 @@ button:hover {
     color: #fff;
     box-shadow: 0 0 15px #76b900;
 }
+
+.token-display {
+    margin-top: 2em;
+    padding: 1.5em;
+    background: #2a2a2a;
+    border-radius: 8px;
+    border: 1px solid #444;
+}
+
+.token-display h2 {
+    margin: 0 0 0.5em 0;
+    color: #76b900;
+    font-size: 1.2em;
+}
+
+.token-display .token {
+    word-wrap: break-word;
+    font-family: monospace;
+    font-size: 0.9em;
+    color: #ddd;
+}

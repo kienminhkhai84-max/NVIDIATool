@@ -1,81 +1,113 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const puppeteer = require('puppeteer');
+const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const app = express();
 const port = 3000;
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, '../public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '../views'));
 
-// Helper function to delay execution
-const f1 = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+app.use(express.static(path.join(__dirname, '../public')));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-// Initialize token.json if it doesn't exist
-if (!fs.existsSync('token.json')) {
-    fs.writeFileSync('token.json', JSON.stringify({}));
-}
+// --- DATA HANDLING ---
+const tokenFilePath = path.join(__dirname, 'tokens.json');
 
-app.get('/', (req, res) => {
-    res.render('login', { error: req.query.error });
-});
-
-app.post('/do-login', async (req, res) => {
-    const { email, password } = req.body;
-    const v2 = JSON.parse(fs.readFileSync('token.json', 'utf8'));
-    let browser;
+const readTokenData = () => {
     try {
-        browser = await puppeteer.launch({ headless: "new", args: ['--no-sandbox', '--disable-setuid-sandbox'] });
-        const page = await browser.newPage();
-        await page.goto('https://learn.learn.nvidia.com/login');
-        await page.waitForSelector('#email', { visible: true, timeout: 10000 });
-        await page.type('#email', email);
-        await page.click('button[type="submit"]');
-        await page.waitForSelector('#signinPassword', { visible: true, timeout: 40000 });
-        await page.type('#signinPassword', password);
-        await page.click('#passwordLoginButton');
-        await page.waitForNavigation();
-        await f1(60000);
-        await page.goto('https://learn.learn.nvidia.com/dashboard');
-        const cookies = await page.cookies();
-        const v3 = cookies.find(c => c.name === 'sessionid');
-        if (v3) {
-            if (!v2[email]) v2[email] = {};
-            v2[email].pass = password;
-            v2[email].token = v3.value;
-            if (v2[email].hasDevice === undefined) v2[email].hasDevice = false;
-            fs.writeFileSync('token.json', JSON.stringify(v2));
-            res.cookie('token', v3.value);
-            res.redirect('/dashboard');
-        } else {
-            res.redirect('/?error=invalid');
+        if (fs.existsSync(tokenFilePath)) {
+            const data = fs.readFileSync(tokenFilePath, 'utf8');
+            return JSON.parse(data);
         }
     } catch (e) {
-        res.redirect('/?error=' + encodeURIComponent(e.message));
-    } finally {
-        if (browser) await browser.close();
+        console.error('Error reading token data:', e);
     }
-});
+    return {};
+};
 
-app.get('/dashboard', (req, res) => {
-    if (req.cookies.token) {
-        res.render('dashboard');
+const writeTokenData = async (data) => {
+    try {
+        await fs.promises.writeFile(tokenFilePath, JSON.stringify(data, null, 2));
+    } catch (e) {
+        console.error('Error writing token data:', e);
+    }
+};
+
+// Middleware to check if the user is logged in
+const requireAuth = (req, res, next) => {
+    const token = req.cookies.token;
+    if (!token) {
+        return res.redirect('/?error=Please log in to continue.');
+    }
+
+    const tokenData = readTokenData();
+    const userEntry = Object.values(tokenData).find(d => d.token === token);
+
+    if (userEntry) {
+        req.token = token; // Pass the token to the request object
+        next(); // User is authenticated, proceed
     } else {
-        res.redirect('/');
+        res.clearCookie('token');
+        return res.redirect('/?error=Invalid session. Please log in again.');
+    }
+};
+
+// --- ROUTES ---
+
+// Login page (home)
+app.get('/', (req, res) => {
+    const { error } = req.query;
+    res.render('login', { error: error || null });
+});
+
+// Handle login logic
+app.post('/do-login', async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.redirect('/?error=Email and password are required.');
+    }
+
+    try {
+        const tokenData = readTokenData();
+        
+        // In a real app, you would hash and salt passwords.
+        // For this demo, we are comparing plain text.
+        const userExists = tokenData[email] && tokenData[email].pass === password;
+
+        if (userExists) {
+            const sessionToken = crypto.randomBytes(32).toString('hex');
+            tokenData[email].token = sessionToken;
+            await writeTokenData(tokenData);
+            res.cookie('token', sessionToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
+            res.redirect('/dashboard');
+        } else {
+            res.redirect('/?error=' + encodeURIComponent('Invalid email or password.'));
+        }
+    } catch (e) {
+        console.error('Critical error during login:', e.message);
+        res.redirect('/?error=' + encodeURIComponent('Login failed: ' + e.message));
     }
 });
 
+// Dashboard page (protected)
+app.get('/dashboard', requireAuth, (req, res) => {
+    // The token is available from the middleware via req.token
+    res.render('dashboard', { token: req.token });
+});
+
+
+// Logout
 app.get('/logout', (req, res) => {
     res.clearCookie('token');
     res.redirect('/');
 });
 
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+    console.log(`Server is running at http://localhost:${port}`);
 });

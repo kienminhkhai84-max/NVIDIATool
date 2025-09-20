@@ -3,28 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>NVIDIA Learning - Login</title>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>NVIDIA Learning Login</h1>
-
+        <h1>Welcome Back</h1>
+        <p>Sign in to continue your learning journey</p>
+        
         <% if (error) { %>
-            <div class="error-message"><%= error %></div>
+            <p class="error"><%= error %></p>
         <% } %>
 
         <form action="/do-login" method="POST">
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" name="email" placeholder="Email Address" required>
             </div>
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" placeholder="Password" required>
             </div>
-            <button type="submit" class="btn">Login</button>
+            <button type="submit">Login</button>
         </form>
+
+        <div class="signup-link">
+            <p>Don't have an account? <a href="https://learn.nvidia.com/join?auth=login&redirectPath=/my-learning" target="_blank">Sign Up</a></p>
+        </div>
     </div>
 </body>
 </html>

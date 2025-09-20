@@ -3,32 +3,30 @@
 
 ## Overview
 
-This application provides a web interface for users to log in. The backend uses Puppeteer to automate authentication against an external service (learn.learn.nvidia.com) and returns a session token to the user.
+This project is a web application that allows users to log in to the NVIDIA learning platform using their credentials. The application uses Puppeteer to automate the login process and then displays a dashboard upon successful login.
 
-## Style, Design, and Features
+## Features
 
-*   **Frontend:**
-    *   A clean, centered login form.
-    *   Uses React with Next.js for the user interface.
-    *   Basic styling with Tailwind CSS.
-    *   Displays error messages to the user.
-*   **Backend:**
-    *   An API endpoint (`/api/login`) to handle login requests.
-    *   Uses Puppeteer to automate the login process on an external website in a headless browser.
-    *   Returns a session token upon successful authentication.
+*   User login with email and password.
+*   Automated login to NVIDIA's learning platform using Puppeteer.
+*   Session management using cookies.
+*   A dashboard page accessible after login.
+*   A logout feature.
+
+## Design and Style
+
+*   The application will have a clean and simple user interface.
+*   The login page will feature a form for email and password input.
+*   The dashboard will be a simple page with a welcome message and a logout button.
+*   Styling will be done using a separate CSS file to maintain a consistent look and feel.
 
 ## Current Plan
 
-1.  **Install Dependencies:** Ensure all required npm packages, including `puppeteer`, are installed.
-2.  **Update API Route (`/app/api/login/route.js`):**
-    *   Replace the mock login logic with the Puppeteer-based authentication flow.
-    *   The API will receive `email` and `password` in a POST request.
-    *   On successful login, it will extract the `sessionid` cookie and return it as a token in a JSON response.
-    .
-3.  **Update Login Page (`/app/login/page.js`):**
-    *   Modify the login form to accept an email and password.
-    *   Ensure the form correctly submits the credentials to the `/api/login` endpoint.
-    *   Handle the token received in the response from the API.
-4.  **Create Root Redirect (`/app/page.js`):**
-    *   Create a new page at the root of the application.
-    *   This page will automatically redirect users to the `/login` page.
+1.  **Set up the project structure:** Create the necessary files and folders for the application.
+2.  **Install dependencies:** Install Express, EJS, body-parser, cookie-parser, and Puppeteer.
+3.  **Create the server:** Set up an Express server to handle HTTP requests.
+4.  **Implement the login functionality:** Create a route that uses Puppeteer to log in to the NVIDIA platform.
+5.  **Create the user interface:** Design the login page and the dashboard.
+6.  **Add session management:** Use cookies to maintain user sessions.
+7.  **Implement the logout feature:** Create a route to clear the session and log the user out.
+

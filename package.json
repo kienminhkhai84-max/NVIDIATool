@@ -1,27 +1,16 @@
 {
   "name": "my-local-web",
   "version": "1.0.0",
-  "description": "A local web application for automated login.",
-  "main": "server.js",
+  "description": "A web application with Puppeteer for NVIDIA login.",
+  "main": "server/index.js",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "node server/index.js"
   },
   "dependencies": {
-    "cookie-parser": "^1.4.6",
-    "ejs": "^3.1.9",
-    "express": "^4.18.2",
-    "next": "latest",
-    "puppeteer-core": "^21.5.2",
-    "react": "latest",
-    "react-dom": "latest"
-  },
-  "devDependencies": {
-    "@next/eslint-plugin-next": "^15.5.3",
-    "@types/react": "19.1.13",
-    "eslint": "^9.35.0",
-    "typescript": "5.9.2"
+    "express": "^4.17.1",
+    "ejs": "^3.1.6",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "puppeteer": "^10.4.0"
   }
 }

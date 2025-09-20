@@ -4,12 +4,24 @@
   "description": "A local web application for automated login.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
     "cookie-parser": "^1.4.6",
     "ejs": "^3.1.9",
     "express": "^4.18.2",
-    "puppeteer-core": "^21.5.2"
+    "next": "latest",
+    "puppeteer-core": "^21.5.2",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@next/eslint-plugin-next": "^15.5.3",
+    "@types/react": "19.1.13",
+    "eslint": "^9.35.0",
+    "typescript": "5.9.2"
   }
 }

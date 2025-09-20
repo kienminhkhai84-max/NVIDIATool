@@ -6,7 +6,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 // Đường dẫn đến tệp JSON để lưu trữ token
 const TOKEN_FILE_PATH = path.join(__dirname, 'token.json');
@@ -83,50 +83,26 @@ app.post('/do-login', async (req, res) => {
         console.log('Typing email...');
         await page.waitForSelector('#email', { visible: true, timeout: 10000 });
         await page.type('#email', email);
-        await page.click('button[type="submit"]');
-
-        console.log('Typing password...');
-        await page.waitForSelector('#signinPassword', { visible: true, timeout: 40000 });
-        await page.type('#signinPassword', password);
-        await page.click('#passwordLoginButton');
-
-        console.log('Waiting for navigation after login...');
-        await page.waitForNavigation({ timeout: 60000 });
         
-        console.log('Navigating to dashboard to get cookies...');
-        await page.goto('https://learn.learn.nvidia.com/dashboard');
+        console.log('Pressing Enter after email...');
+        await page.keyboard.press('Enter');
 
-        const cookies = await page.cookies();
-        const sessionCookie = cookies.find(c => c.name === 'sessionid');
+        console.log('Waiting for 5 seconds for the page to transition...');
+        await page.waitForTimeout(5000);
 
-        if (sessionCookie) {
-            console.log('Successfully found session cookie!');
-            const tokenData = readTokenData();
+        console.log('Saving screenshot to password-page.png');
+        await page.screenshot({ path: 'password-page.png', fullPage: true });
 
-            if (!tokenData[email]) {
-                tokenData[email] = {};
-            }
-            // CẢNH BÁO: Lưu mật khẩu ở dạng văn bản thuần là không an toàn.
-            // Mã này chỉ dành cho mục đích trình diễn cục bộ.
-            tokenData[email].pass = password;
-            tokenData[email].token = sessionCookie.value;
-            if (tokenData[email].hasDevice === undefined) {
-                tokenData[email].hasDevice = false;
-            }
+        console.log('Saving HTML content to password-page.html');
+        const pageContent = await page.content();
+        fs.writeFileSync('password-page.html', pageContent);
 
-            writeTokenData(tokenData);
-
-            // Đặt cookie trong trình duyệt của người dùng
-            res.cookie('token', sessionCookie.value, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // 1 day
-            res.redirect('/dashboard');
-        } else {
-            console.error('Login failed: sessionid cookie not found.');
-            res.redirect('/?error=Invalid email or password.');
-        }
+        console.log('Debug files saved. The script will now stop.');
+        res.redirect('/?error=Debug files have been saved. Please check password-page.png and password-page.html');
 
     } catch (e) {
-        console.error('An error occurred during login:', e);
-        res.redirect('/?error=' + encodeURIComponent('Login failed: ' + e.message));
+        console.error('An error occurred during the debugging process:', e);
+        res.redirect('/?error=' + encodeURIComponent('An error occurred: ' + e.message));
     } finally {
         if (browser) {
             console.log('Closing browser...');
